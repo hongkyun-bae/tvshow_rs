@@ -1,4 +1,5 @@
 import pandas as pd
+from pathlib import Path
 
 
 def BuildDictMatrix(method, CV, trainEPG, trainWL, programs2, users2):
@@ -107,7 +108,7 @@ def ComputePropDictMatrix(PrefDict, PrefMatrix, ConfMatrix, watchLog, episode, a
             continue
 
         PrefDict[key][episode['program_title']].append(wRatio)
-        # 여기에서 각 positive 밑에 사용자가 시청하지 않은 negative 에피소드들을 overlapped/broadcasting 값과 함께 저장하면 어떨까?
+
         PrefMatrix[episode['program_title']][key] += wRatio
         ConfMatrix[episode['program_title']][key] += 1
 
@@ -126,8 +127,11 @@ def buildDict(users, programs):
 
 def writeBaseFile(method, CV, currentDict, fileType):
     print('Writing the base file...')
-    path = '../origin/' + str(CV) + 'CV/Epi_' + method + '_' + fileType
-    f = open(path + '.base', 'w')
+    path = 'data/' + str(CV) + 'CV'
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    
+    f = open(path + '/Epi_' + method + '_' + fileType + '.base', 'w')
+    
     print(path)
 
     unit = int(len(currentDict) * 0.01)
@@ -180,8 +184,11 @@ def BuildDictMatrix_ver2(method, CV, trainEPG, trainWL, programs2, users2):
     writeBaseFile(method, CV, WatchDict, 'w_intv')
 
     print('Writing the df files...')
-    path_matrix1 = '../origin/' + str(CV) + 'CV/EpiPrefMatrix_' + method + '_competable.df'
-    path_matrix2 = '../origin/' + str(CV) + 'CV/EpiConfMatrix_' + method + '_competable.df'
+    path_matrix1 = 'data/' + str(CV) + 'CV/EpiPrefMatrix_' + method + '_competable.df'
+    path_matrix2 = 'data/' + str(CV) + 'CV/EpiConfMatrix_' + method + '_competable.df'
+
+    Path(path_matrix1).parent.mkdir(parents=True, exist_ok=True)
+    Path(path_matrix2).parent.mkdir(parents=True, exist_ok=True)
 
     PrefMatrix.to_pickle(path_matrix1)
     ConfMatrix.to_pickle(path_matrix2)

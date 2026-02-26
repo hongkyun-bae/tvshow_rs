@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import time
+from pathlib import Path
 
 def computeShowTimeMatrix(PrefMatrix,watchLog,program):
     wLogs = watchLog[(watchLog['TVshowID'] == program['program_title'])\
@@ -288,41 +289,41 @@ def BuildMatrix(method, CV, trainEPG, trainWL, programs2, users2):
         if cnt%unit == 0:
             print(cnt/unit, '%...')
         if method =='ST':
-            computeShowTimeMatrix(PrefMatrix,trainWL,row)
+            computeShowTimeMatrix(PrefMatrix, trainWL, row)
         elif method =='RT':
-            computeRecTimeMatrix(PrefMatrix,trainWL,row)
+            computeRecTimeMatrix(PrefMatrix, trainWL, row)
         elif method=='PM':
-            computePMMatrix(RatingMatrix,trainWL,row)
+            computePMMatrix(RatingMatrix, trainWL, row)
         elif method=='PNM':
-            computePNMMatrix(PrefMatrix,ConfMatrix,trainWL,row)
+            computePNMMatrix(PrefMatrix, ConfMatrix, trainWL, row)
         elif method=='Prop':
             computePropMatrix(PrefMatrix, ConfMatrix, trainWL, row, 0.5, 0.1)    # row: each episode
         elif method =='Prop_New':
-            computePropMatrix(PrefMatrix,ConfMatrix,trainWL,row,0.5,0.1)
+            computePropMatrix(PrefMatrix, ConfMatrix, trainWL, row, 0.5, 0.1)
         elif method=='Prop_P':
-            computePropMatrix_P(PrefMatrix,ConfMatrix,trainWL,row,0.5,0.1)
+            computePropMatrix_P(PrefMatrix, ConfMatrix, trainWL, row, 0.5, 0.1)
         elif method =='Prop_PM':
-            computePropMatrix_PM(PrefMatrix,ConfMatrix,trainWL,row,0.5,0.1)
+            computePropMatrix_PM(PrefMatrix, ConfMatrix, trainWL, row, 0.5, 0.1)
         elif method =='Prop_PN':
-            computePropMatrix_PN(PrefMatrix,ConfMatrix,trainWL,row,0.5,0.1)
+            computePropMatrix_PN(PrefMatrix, ConfMatrix, trainWL, row, 0.5, 0.1)
         elif method =='Prop_B':
-            computePropMatrix_B(PrefMatrix,ConfMatrix,trainWL,row,0.5,0.1)
+            computePropMatrix_B(PrefMatrix, ConfMatrix, trainWL, row, 0.5, 0.1)
         elif method.startswith('Prop'):
-            computePropMatrix(PrefMatrix,ConfMatrix,trainWL,row,0.9,0.1)
+            computePropMatrix(PrefMatrix, ConfMatrix, trainWL, row, 0.9, 0.1)
         else:
             return -1
         cnt+=1
 
-    # path1 = '../wALSResult/'+str(CV)+'CV/PrefMatrix_'+method+'.df'
-    # path2 = '../wALSResult/'+str(CV)+'CV/ConfMatrix_'+method+'.df'
+    path1 = 'data/' + str(CV) + 'CV/ProgPrefMatrix_' + method + '.df'
+    path2 = 'data/' + str(CV) + 'CV/ProgConfMatrix_' + method + '.df'
 
-    path1 = '../origin/' + str(CV) + 'CV/ProgPrefMatrix_' + method + '.df'
-    path2 = '../origin/' + str(CV) + 'CV/ProgConfMatrix_' + method + '.df'
-
-    if method =='PM':
-        computePrefConfMatrix(PrefMatrix,ConfMatrix,RatingMatrix,0.4)
-        RatingMatrix.to_pickle(path)
+    # if method =='PM':
+    #     computePrefConfMatrix(PrefMatrix, ConfMatrix, RatingMatrix, 0.4)
+    #     RatingMatrix.to_pickle(path1)
     
+    Path(path1).parent.mkdir(parents=True, exist_ok=True)
+    Path(path2).parent.mkdir(parents=True, exist_ok=True)
+
     ConfMatrix.to_pickle(path2)
     PrefMatrix.to_pickle(path1)
 

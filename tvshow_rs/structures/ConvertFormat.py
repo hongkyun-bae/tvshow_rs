@@ -2,6 +2,7 @@
 
 import pandas as pd
 import numpy as np
+from pathlib import Path
 
 def BuildPredMatrix(predictMatrix,PrefMatrix):
     predictMatrix.seek(0)
@@ -28,14 +29,16 @@ def BuildMM(PrefMatrix, ConfMatrix, factor, CV, method, reg):
     # path = '../wALSResult/' + str(CV) + 'CV/' + method
     # path2 = '../wALSResult/%dFact_%dCV_Reg%.2f/%s_test.mm' % (factor, CV, reg, method)
 
-    # path = '../origin/' + str(CV) + 'CV/EpiPref_' + method
+    path = '../origin/' + str(CV) + 'CV'
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+
     # path2 = '../origin/' + str(CV) + 'CV/EpiPref_Prop_test.mm'
 
-    path = '../origin/' + str(CV) + 'CV/ProgPref_' + method + '_competable'
-    path2 = '../origin/' + str(CV) + 'CV/ProgPref_Prop_competable_test.mm'
+    # path = '../origin/' + str(CV) + 'CV/ProgPref_' + method + '_competable'
+    # path2 = '../origin/' + str(CV) + 'CV/ProgPref_Prop_competable_test.mm'
 
-    f = open(path+'_train.mm', 'w')
-    f2 = open(path2, 'w')
+    f = open(path + '/EpiPref_' + method + '_train.mm', 'w')
+    f2 = open(path + '/EpiPref_' + method + '_test.mm', 'w')
 
     f.write('%%MatrixMarket matrix coordinate real general\n')
     f2.write('%%MatrixMarket matrix coordinate real general\n')

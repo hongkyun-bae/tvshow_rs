@@ -4,12 +4,15 @@ import random
 from datetime import datetime,timedelta,time 
 
 def readData():
-    wl_6m_df = pd.read_pickle('Z:\\hongkyun\\TVshow\\Data\\wl_6m_df.df')
-    epg_df = pd.read_pickle('Z:\\hongkyun\\TVshow\\Data\\epg_df.df')
+    # wl_6m_df = pd.read_pickle('Z:\\hongkyun\\TVshow\\Data\\wl_6m_df.df')
+    # epg_df = pd.read_pickle('Z:\\hongkyun\\TVshow\\Data\\epg_df.df')
+    wl_6m_df = pd.read_pickle('data/wl_6m_df.df')
+    epg_df = pd.read_pickle('data/epg_df.df')
+
     return wl_6m_df,epg_df
 
 def readTimeFactorMatrix(CV):
-    return pd.read_pickle('Z:\\hongkyun\\TVshow\\Data\\time_factor_histogram.df')
+    return pd.read_pickle('data\\time_factor_histogram.df')
 
 
 def readNeuralPredMatrix(PrefMatrix, users2, programs2, method, batch, factor, lr, iter, CV):
@@ -209,15 +212,6 @@ def Preprocessing(CV, wl_6m_df, epg_df, mode, PrefMatrix=None):
         members = list(set(wl_1m_df[wl_1m_df['PanelID'] == panel]['MemberID']))
         for member in members:
             users1.append(str(panel)+'-'+str(member))    # Users of test set
-
-    # if PrefMatrix != None:    # If mode is not 0 nor 4    # Why error?...
-        # for index, row in wl_1m_df.iterrows():
-        #     try:
-        #         if PrefMatrix[row['TVshowID']][str(row['PanelID']) + '-' + str(row['MemberID'])] > 0:
-        #             wl_1m_df.set_value(index, 'Watched', 1)
-        #     except:
-        #         wl_1m_df.set_value(index, 'Watched', -1)
-        #         continue
 
     if (mode != 0) & (mode != 4) & (mode != 5):
         for index, row in wl_1m_df.iterrows():

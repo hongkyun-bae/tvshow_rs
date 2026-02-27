@@ -3,7 +3,7 @@
 This repository contains the implementation of the competition-aware TV show recommendation framework proposed in "A Competition-Aware Approach to Accurate TV Show Recommendation [IEEE ICDE 2023]."
 
 ## Important Notice
-This repository does NOT include the BPR-MF implementation.
+This repository does **NOT** include the BPR-MF implementation.
 It assumes that predicted preference scores from an external BPR-MF model are already generated.
 This project focuses on:
 - Constructing competition-aware preference representations

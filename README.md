@@ -26,7 +26,7 @@ run python main.py --mode 0 --method Prop --CV 1
 - Exports formatted matrices for external MF training
 
 ### Step 2. Recommendation & Evaluation
-This step is used to predict preference scores after running external BPR-MF.
+This step is used to predict preference scores after running [external BPR-MF](./tvshow_rs/BPR-MF/).
 ```
 run python main.py --mode 1 --method Prop --CV 1
 ```

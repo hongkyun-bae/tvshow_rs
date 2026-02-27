@@ -1,4 +1,5 @@
 import numpy as np
+from pathlib import Path
 
 def Recall(Score,result):
     
@@ -55,19 +56,11 @@ def mrr(MRR,result):
     print(str(np.array(MRR).mean()))
     
 def Evaluate(Score,ndcgs,MRR,Score2,ndcgs2,MRR2,method,CV,reg,factor,D):
-    
-    # result = open('./Result/'+str(factor)+'Fact_'+str(CV)+'CV_Reg'+str(reg)+'_'+method,'w')
-    # result = open('../results/' + str(CV) + 'CV/Epi_'+ method + '.txt', 'w')
-    result = open('../results/' + str(CV) + 'CV/Prog_' + method + '_Pred_1020_' + str(factor) + 'Fact_Reg' + str(reg) + '.txt', 'w')
-    # result = open('../results/' + str(CV) + 'CV/Epi_' + method + '_x3_allneg.txt', 'w')
-    # result = open('../results/' + str(CV) + 'CV/LR0.001/Reg0.00125/Epi_' + method + '_x1_allneg_onlypos0.5.txt', 'w')
-    # result = open('../results/' + str(CV) + 'CV/wIntv-based/MLP/Epi_' + method + '_competable_alpha0.1_x3.0_all_reg0.00125_lr0.001_128_512_1020_tf.txt', 'w')
-    # result = open('../results/' + str(CV) + 'CV/wIntv-based/Epi_' + method + '_competable_alpha0.05_x50_all_1020.txt', 'w')
-    # result = open('../results/' + str(CV) + 'CV/wIntv-based/Epi_' + method + '_competable_alpha0.1_x50_all_1020_nonwatched-zero.txt', 'w')
-    # result = open('../results/' + str(CV) + 'CV/Prop_train_x10_1020.txt', 'w')
+    path = 'result/' + str(CV) + 'CV'
+    Path(path).mkdir(parents=True, exist_ok=True)
 
-    #if method!='Pop' and D==0:
-    #'''
+    result = open(path + '/sample_result.txt', 'w')
+
     if D == 0:
         result.write("===Total===\n")
         print('===Total===')
@@ -89,9 +82,8 @@ def Evaluate(Score,ndcgs,MRR,Score2,ndcgs2,MRR2,method,CV,reg,factor,D):
         Precision(Score,result)
         ndcg(Score,ndcgs,result)
         mrr(MRR,result)
-   #''' 
+
     if D != 1:
-        #if method!='Pop' and D!=1:
         result.write("\n===Unwatched===\n")
         print('===Unwatched===')
 
@@ -99,4 +91,3 @@ def Evaluate(Score,ndcgs,MRR,Score2,ndcgs2,MRR2,method,CV,reg,factor,D):
         Precision(Score2,result)
         ndcg(Score2,ndcgs2,result)
         mrr(MRR2,result)
-

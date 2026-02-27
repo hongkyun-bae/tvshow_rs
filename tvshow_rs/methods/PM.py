@@ -180,7 +180,7 @@ def getWatchRatio(epg_df, TVshow, watchLog):
 
         if wRatio < 0.1:
             wRatio = 0
-            print(watchTime[idx])
+            # print(watchTime[idx])
             excluded_watchTimes.append(watchTime[idx])
     #'''
     #timeslot = (program['endDate'] - program['startDate']).seconds/60

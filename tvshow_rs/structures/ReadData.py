@@ -12,19 +12,11 @@ def readData():
     return wl_6m_df,epg_df
 
 def readTimeFactorMatrix(CV):
-    return pd.read_pickle('data\\time_factor_histogram.df')
+    return pd.read_pickle('data/time_factor_histogram.df')
 
 
 def readNeuralPredMatrix(PrefMatrix, users2, programs2, method, batch, factor, lr, iter, CV):
-    #path = '../NeuralResult/'+str(CV)+'CV_batch'+str(batch)+'_factor'+str(factor)+'_lr'+lr+'_iter'+str(iter)+'/Prop_test.mm.predict'
-    # path = '../NeuralCF/Prop_New_test.mm.predict'
-    # path = '../origin/' + str(CV) +'CV/Epi_Prop.predict'
-    # path = '../origin/' + str(CV) + 'CV/Epi_Prop_x3_allneg.predict'
-    # path = '../origin/' + str(CV) + 'CV/LR0.001/Reg0.00125/Epi_Prop_x1_allneg_onlypos0.5.predict'
-    # path = '../origin/' + str(CV) +'CV/Epi_Prop_competable_alpha0.5_x50_all_wgt(rev).predict'
-    # path = 'E:\\hongkyun\\TVshow\\wIntv-based\\MLP\\Epi_Prop_competable_alpha0.1_x3.0_all_reg0.00125_lr0.001_128_512.predict'
-    path = 'Z:\\hongkyun\\TVshow\\wIntv-based\\Epi_Prop_competable_alpha0.05_x50_all.predict'
-    # path = 'C:\\Users\\deadpool\\Documents\\origin\\TVshow\\Prop_train_x10.predict'
+    path = 'data/' + str(CV) + 'CV/sample_BPRMF.predict'
 
     print('Reading the episode-based predict file...')
     print(path)
@@ -44,7 +36,8 @@ def readNeuralPredMatrix(PrefMatrix, users2, programs2, method, batch, factor, l
     for line in predictMatrix:
         user_idx, item_idx, val = line.split()
         # print(user_idx, item_idx, float(val))
-        builtMatrix.set_value(users[int(user_idx)], items[int(item_idx)], float(val))
+        builtMatrix.loc[users[int(user_idx)], items[int(item_idx)]] = float(val)
+        # builtMatrix.set_value(users[int(user_idx)], items[int(item_idx)], float(val))
 
     return builtMatrix
 
@@ -114,21 +107,20 @@ def readNeuralPredMatrix_total(PrefMatrix, ConfMatrix, users2, programs2):
 
 
 def readMatrix(method, CV, D):
+    prefPath = 'data/' + str(CV) + 'CV/EpiPrefMatrix_' + str(method) + '_competable.df'
     # prefPath = 'E:\\hongkyun\\TVshow\\Naive\\ProgPrefMatrix_' + method + '.df'
     # prefPath = 'Z:\\hongkyun\\TVshow\\Naive\\ProgPrefMatrix_Prop.df'
-    prefPath = '../wALSResult/'+str(CV)+'CV/PrefMatrix_' + method + '_PE.df'
     PrefMatrix = pd.read_pickle(prefPath)
     print('PrefMatrix: ' + prefPath)
 
+    confPath = 'data/' + str(CV) + 'CV/EpiConfMatrix_' + str(method) + '_competable.df'
     # confPath = 'E:\\hongkyun\\TVshow\\Naive\\ProgConfMatrix_Prop' + '.df'
     # confPath = 'Z:\\hongkyun\\TVshow\\Naive\\ProgConfMatrix_Prop.df'
-    confPath = '../wALSResult/'+str(CV)+'CV/ConfMatrix_' + method + '_PE.df'
     ConfMatrix = pd.read_pickle(confPath)
     print('ConffMatrix: ' + confPath)
 
-    if method in ['PNM'] or method.startswith('Prop'):
-        PrefMatrix = PrefMatrix.divide(ConfMatrix, axis='index')
-        PrefMatrix = PrefMatrix.fillna(0.0)
+    PrefMatrix = PrefMatrix.divide(ConfMatrix, axis='index')
+    PrefMatrix = PrefMatrix.fillna(0.0)
 
     return PrefMatrix, ConfMatrix
 
@@ -213,15 +205,17 @@ def Preprocessing(CV, wl_6m_df, epg_df, mode, PrefMatrix=None):
         for member in members:
             users1.append(str(panel)+'-'+str(member))    # Users of test set
 
-    if (mode != 0) & (mode != 4) & (mode != 5):
+    if mode != 0:
         for index, row in wl_1m_df.iterrows():
             try:
                 if PrefMatrix[row['TVshowID']][str(row['PanelID']) + '-' + str(row['MemberID'])] > 0:
                     # Assigns the value of 1 to TV show selected by the corresponding user
-                    wl_1m_df.set_value(index, 'Watched', 1)
+                    wl_1m_df.loc[index, 'Watched'] = 1
+                    # wl_1m_df.set_value(index, 'Watched', 1)
             except:
                 # If the corresponding TV show has been newly inserted within wl_1m, then except it
-                wl_1m_df.set_value(index, 'Watched', -1)
+                wl_1m_df.loc[index, 'Watched'] = -1
+                # wl_1m_df.set_value(index, 'Watched', -1)
                 continue
 
     return wl_2m_df, wl_1m_df, epg2_df, epg1_df, programs2, users2, programs1, users1

@@ -128,7 +128,7 @@ def buildDict(users, programs):
 def writeBaseFile(method, CV, currentDict, fileType):
     print('Writing the base file...')
     path = 'data/' + str(CV) + 'CV'
-    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    Path(path).mkdir(parents=True, exist_ok=True)
     
     f = open(path + '/Epi_' + method + '_' + fileType + '.base', 'w')
     

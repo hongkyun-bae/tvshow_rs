@@ -1,6 +1,7 @@
 # A Competition-Aware Approach to Accurate TV Show Recommendation (IEEE ICDE-23)
 
-This repository contains the implementation of the competition-aware TV show recommendation framework proposed in "A Competition-Aware Approach to Accurate TV Show Recommendation [IEEE ICDE 2023]."
+This repository contains the implementation of the competition-aware TV show recommendation framework proposed in 
+["A Competition-Aware Approach to Accurate TV Show Recommendation" (IEEE ICDE 2023)](https://doi.org/10.1109/ICDE55515.2023.00216).
 
 ## Notice
 This repository does **NOT** include the BPR-MF implementation.
@@ -24,6 +25,11 @@ run python main.py --mode 0 --method Prop --CV 1
 - Reads raw watch log data
 - Constructs preference and confidence matrices
 - Exports formatted matrices for external MF training
+
+**(Output)**
+- Epi_Prop_Competable.base: User preference scores for each TV program inferred based on watchable intervals
+- Epi_Prop_w_intv.base: The actual time intervals during which a user watched each episode of a TV program
+- Epi_Prop_wable_intv.base: The time intervals during which each episode of a TV program was available (i.e., watchable) to the user
 
 ### Step 2. Recommendation & Evaluation
 This step is used to predict preference scores after running [external BPR-MF](./tvshow_rs/BPR-MF/).

@@ -48,4 +48,4 @@ run python main.py --mode 1 --method Prop --CV 1
 - **sample_BPRMF.predict**: User preference scores for each TV program predicted by an external BPR-MF model
 
 **(Output)**
-- **sample_result.txt**: Evaluation results
+- **sample_result.txt**: Evaluation results of top-N recommendation accuracy
